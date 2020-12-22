@@ -148,9 +148,4 @@ public class UserDaoHibernateImpl implements UserDao {
             }
         }
     }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }
