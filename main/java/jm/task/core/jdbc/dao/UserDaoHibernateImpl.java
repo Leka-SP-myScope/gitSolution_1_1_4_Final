@@ -6,7 +6,9 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -19,7 +21,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            NativeQuery sqlQuery = session.createSQLQuery("CREATE TABLE IF NOT EXISTS USER  ("
+           TypedQuery sqlQuery = session.createSQLQuery("CREATE TABLE IF NOT EXISTS USER  ("
                     + "Id INT (6) PRIMARY KEY NOT NULL AUTO_INCREMENT, "
                     + "Name VARCHAR (80) NOT NULL, "
                     + "LastName VARCHAR (80) NOT NULL, "
@@ -39,7 +41,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            NativeQuery sqlQuery = session.createSQLQuery("DROP TABLE IF EXISTS USER");
+            TypedQuery sqlQuery = session.createSQLQuery("DROP TABLE IF EXISTS USER");
             sqlQuery.executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
@@ -87,8 +89,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            NativeQuery query = session.createSQLQuery("SELECT * FROM USER");
-            query.addEntity(User.class);
+            Query query = session.createSQLQuery("SELECT * FROM USER");
+             ((NativeQuery) query).addEntity(User.class);
             userList = query.list();
             transaction.commit();
         } catch (HibernateException e) {
@@ -105,7 +107,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
         try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            NativeQuery sqlQuery = session.createSQLQuery("TRUNCATE TABLE USER");
+            TypedQuery sqlQuery = session.createSQLQuery("TRUNCATE TABLE USER");
             sqlQuery.executeUpdate();
             transaction.commit();
         } catch (HibernateException e) {
